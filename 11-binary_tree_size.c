@@ -1,20 +1,31 @@
-#include <stdlib.h>
 #include "binary_trees.h"
+
 /**
-* binary_tree_size -measures the size of a binary tree
-* @tree:  pointer to the root node of the tree to measure the size.
-* Return: If tree is NULL, function return 0
-**/
+ * node_counter - Computes the number of nodes in a binary tree.
+ * @tree: The binary tree.
+ * @n: A pointer to the tree's node count value.
+ */
+void node_counter(const binary_tree_t *tree, size_t *n)
+{
+	if (tree != NULL)
+	{
+		if (n != NULL)
+			(*n)++;
+		node_counter(tree->left, n);
+		node_counter(tree->right, n);
+	}
+}
+
+/**
+ * binary_tree_size - Computes the number of nodes in a binary tree.
+ * @tree: The binary tree.
+ *
+ * Return: The number of nodes in the given binary tree.
+ */
 size_t binary_tree_size(const binary_tree_t *tree)
 {
-size_t bt_size = 0;
+	size_t n = 0;
 
-	if (tree == NULL)
-		return (0);
-	if (tree->left != NULL)
-		bt_size = bt_size + binary_tree_size(tree->left);
-	if (tree->right != NULL)
-		bt_size = bt_size + binary_tree_size(tree->right);
-	bt_size = bt_size + 1;
-	return (bt_size);
+	node_counter(tree, &n);
+	return (n);
 }

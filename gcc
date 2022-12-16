@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+Files=""
+Args=()
+n=0
+
+readarray -d ' ' Args < <(echo -n "$@")
+n="${#@}"
+for ((i = 0; i < "$n"; i++)) do
+	num=$(echo "${Args[i]}" | tr -d ' ')
+	if [ "$i" -eq 0 ]; then
+		Files="tests/$num-main.c "$(echo "$num"-*.c)
+	else
+		Files="$Files "$(echo "$num"-*.c)
+	fi
+done
+Files="$Files ""binary_tree_print.c"
+echo -e "\e[104m Compiling program... \e[0m\e[33m"
+# shellcheck disable=SC2086
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 $Files -o btree;
+[ "$(echo -n $?)" == "0" ] && echo -e "\e[0m\e[104m Running executable [./btree]... \e[0m" && ./btree
